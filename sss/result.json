@@ -1,0 +1,10 @@
+{
+  "https://google.com/health": {
+    "api_last_status_code": 200,
+    "api_last_msg": "The API is up."
+  },
+  "https://facebook.com/health": {
+    "api_last_status_code": 200,
+    "api_last_msg": "The API is up."
+  }
+}
