@@ -1,0 +1,14 @@
+[
+  {
+    "api_name": "User Frontend",
+    "api_url": "https://google.com/health"
+  },
+  {
+    "api_name": "Admin Frontend",
+    "api_url": "https://facebook.com/health"
+  },
+  {
+    "api_name": "Backend for frontend",
+    "api_url": "https://youtube.com/health"
+  }
+]

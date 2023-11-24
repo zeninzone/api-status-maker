@@ -1,0 +1,3 @@
+---   V1   -----
+This should host the status of all the api endpoints and should report their status every minute.
+This should watch the app
