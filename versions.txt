@@ -1,3 +1,10 @@
 ---   V1   -----
 This should host the status of all the api endpoints and should report their status every minute.
 This should watch the app
+
+
+---   V2   -----
+Have alerting capabilities
+keep count of last 3 invocations and their statuses
+
+add failure treshold as a parameter in the config.ini file
