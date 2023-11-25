@@ -12,7 +12,6 @@ scheduler = APScheduler()
 # Routes
 @app.route("/")
 def home():
-    print(result)
     return render_template(
         "index.html",
         title=title,

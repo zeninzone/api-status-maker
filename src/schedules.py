@@ -23,7 +23,7 @@ def execute_and_respond(api_config):
 
 
 def schedulePingApiEndpoint():
-    print(f"This test runs every {api_ping_frequency_seconds} seconds")
+    print(f"This job runs every {api_ping_frequency_seconds} seconds")
     result = execute_and_respond(api_config)
     with open("./result.json", "w") as f:
         json.dump(result, f)
