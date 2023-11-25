@@ -12,7 +12,8 @@ with open("../config/api_config.json", "r") as config_data:
 with open("./result.json", "r") as result_data:
     result = json.load(result_data)
 
-company_name = global_config.get("global_config", "company_name")
+title = global_config.get("global_config", "title")
+description = global_config.get("global_config", "description")
 notification_email_address = global_config.get(
     "global_config", "notification_email_address"
 )

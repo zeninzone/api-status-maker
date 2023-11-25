@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from datetime import datetime
 from schedules import schedulePingApiEndpoint
 from flask_apscheduler import APScheduler
-from app_config import company_name, api_ping_frequency_seconds, result
+from app_config import title, description, api_ping_frequency_seconds, result
 
 # Flask App
 app = Flask(__name__)
@@ -15,7 +15,8 @@ def home():
     print(result)
     return render_template(
         "index.html",
-        company_name=company_name,
+        title=title,
+        description=description,
         api_responses=result,
         api_ping_frequency_seconds=api_ping_frequency_seconds,
         resp_time=datetime.utcnow() # move to result data
