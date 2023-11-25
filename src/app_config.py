@@ -6,8 +6,11 @@ from configparser import ConfigParser
 global_config = ConfigParser()
 global_config.read("../config/config.ini")
 
-with open("../config/api_config.json", "r") as f:
-    api_config = json.load(f)
+with open("../config/api_config.json", "r") as config_data:
+    api_config = json.load(config_data)
+
+with open("./result.json", "r") as result_data:
+    result = json.load(result_data)
 
 company_name = global_config.get("global_config", "company_name")
 notification_email_address = global_config.get(

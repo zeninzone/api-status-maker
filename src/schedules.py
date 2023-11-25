@@ -1,7 +1,30 @@
+import json
 import logging
 from utils import check_api_status
+from app_config import api_config, api_ping_frequency_seconds
+
+
+def execute_and_respond(api_config):
+    response = list()
+    for conf in api_config:
+        api_name = conf["api_name"]
+        api_url = conf["api_url"]
+        api_response = check_api_status(api_url)
+        response.append(
+            {
+                "api_name": api_name,
+                "api_url": api_url,
+                "api_last_status_code": api_response["status_code"],
+                "api_status_text": api_response["api_status_text"],
+                "api_last_msg": api_response["message"],
+            }
+        )
+    return response
+
 
 def schedulePingApiEndpoint():
-    print("This test runs every 3 seconds")
-    check_api_status("https://youtube.com/health")
-    logging.info('This is an info message')
+    print(f"This test runs every {api_ping_frequency_seconds} seconds")
+    result = execute_and_respond(api_config)
+    with open("./result.json", "w") as f:
+        json.dump(result, f)
+    logging.info("This is an info message from schedulePingApiEndpoint")
