@@ -1,2 +1,4 @@
 venv
 flask_session/
+last_call_record.txt
+result.json
