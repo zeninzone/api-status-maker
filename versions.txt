@@ -8,3 +8,7 @@ Have alerting capabilities
 keep count of last 3 invocations and their statuses
 
 add failure treshold as a parameter in the config.ini file
+
+----  V3 -----
+Have a database for configurations
+
