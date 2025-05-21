@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Development
+.git
+.gitignore
+.env
+.env.*
+*.log
+
+# Project specific
+config/
+instance/
+.pytest_cache/
+.coverage
+htmlcov/
+migrations/__pycache__/
+migrations/versions/__pycache__/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

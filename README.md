@@ -7,3 +7,10 @@ It has multiple configurations and alerting mechanisms
 #### See how it looks below
 
 ![Alt text](./screenshots/home.png?raw=true)
+
+Run with docker
+
+docker run -d \
+  -p 5000:5000 \
+  -v /path/to/your/config.ini:/app/config/config.ini \
+  alsaheem/api-status-checker:latest

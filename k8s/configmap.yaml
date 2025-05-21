@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-status-config
+data:
+  config.ini: |
+    [global_config]
+    title = Nerobuild
+    description = At Nerobuild, we are committed to providing you with a reliable and seamless experience when interacting with our APIs. Our API Status Page is designed to keep you informed about the current health and performance of our API services.
+    api_ping_frequency_seconds = 10
+    notification_email_address = adebisiayomide07@gmail.com
+    default_theme = dark
+    mask_api_urls = false
+
+    [api_user_frontend]
+    api_name = User Frontend
+    api_url = https://google.com/health
+
+    [api_admin_frontend]
+    api_name = Admin Frontend
+    api_url = https://facebook.com/health
+
+    [api_backend_frontend]
+    api_name = Backend for frontend
+    api_url = https://youtube.com/health
+
+    [api_payment_service]
+    api_name = Payment Service
+    api_url = https://non-existent-payment-api.com/health
+
+    [api_auth_service]
+    api_name = Authentication Service
+    api_url = https://httpstat.us/500
+
+    [api_search_service]
+    api_name = Search Service
+    api_url = https://httpstat.us/404
+
+    [api_slow_service]
+    api_name = Slow API Service
+    api_url = https://httpstat.us/200?sleep=5000
+
+    [api_rate_limited]
+    api_name = Rate Limited API
+    api_url = https://httpstat.us/429 

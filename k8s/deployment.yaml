@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-status-maker
+  labels:
+    app: api-status-maker
+spec:
+  # Keep replicas at 1 due to SQLite database limitations
+  # SQLite is a file-based database and doesn't support concurrent access from multiple pods
+  # Increasing replicas would create multiple independent databases, leading to inconsistent state
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-status-maker
+  template:
+    metadata:
+      labels:
+        app: api-status-maker
+    spec:
+      containers:
+      - name: api-status-maker
+        image: alsaheem/api-status-checker:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+          name: http
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: sqlite-data
+          mountPath: /app/instance
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 15
+      volumes:
+      - name: config-volume
+        configMap:
+          name: api-status-config
+      - name: sqlite-data
+        emptyDir: {} 

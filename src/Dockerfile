@@ -1,11 +1,33 @@
-FROM python:3.8-slim-buster
+FROM python:3.9-slim
 
-COPY requirements.txt requirements.txt
+# Set working directory
+WORKDIR /app
 
-RUN pip3 install -r requirements.txt
+# Create necessary directories
+RUN mkdir -p /app/instance /app/config /instance \
+    && chmod -R 777 /instance
 
+# Install dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy application code
 COPY . .
 
-EXPOSE 5001
+# Set environment variables
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=5000
+ENV PYTHONPATH=/app
 
-CMD [ "python", "app.py"]
+# Expose port
+EXPOSE 5000
+
+# Run the application
+CMD ["flask", "run"]

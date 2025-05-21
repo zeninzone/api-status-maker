@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{{theme}}">
   <head>
     <meta charset="UTF-8" />
     <title>API Status Watcher</title>
@@ -13,6 +13,7 @@
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link
       rel="stylesheet"
       type="text/css"
@@ -21,10 +22,21 @@
   </head>
   <body>
     <div class="container mt-5 pt-4">
+      <!-- Theme Selector -->
+      <div class="theme-selector text-end mb-3">
+        <label for="theme">Theme:</label>
+        <select id="theme" class="form-select-sm" onchange="changeTheme(this.value)">
+          <option value="light" {% if theme == 'light' %}selected{% endif %}>Light</option>
+          <option value="dark" {% if theme == 'dark' %}selected{% endif %}>Dark</option>
+          <option value="blue" {% if theme == 'blue' %}selected{% endif %}>Blue</option>
+          <option value="purple" {% if theme == 'purple' %}selected{% endif %}>Purple</option>
+        </select>
+      </div>
+
       <div class="row align-items-end mb-4 pb-2">
         <div class="col-md-8">
           <div class="section-title text-center text-md-start">
-            <h2 class="title mb-4">Api Status for {{title}}</h2>
+            <h2 class="title mb-4">API Status for {{title}}</h2>
             <p class="text-muted mb-0 para-desc">
               {{description}}
             </p>
@@ -32,10 +44,12 @@
         </div>
         <!--end col-->
 
-        <div class="col-md-4 mt-4 mt-sm-0 d-none d-md-block">
+        <div class="col-md-4 mt-4 mt-sm-0">
           <div class="text-center text-md-end">
-            <p class="text-dark border-dark font-weight-bold"
-              > <strong>Last Check : {{resp_time}}</strong>  </a>
+            <p class="text-dark">
+              <strong>Last Check: </strong>{{resp_time}}<br>
+              <strong>Next Check: </strong><span id="countdown">{{api_ping_frequency_seconds}}</span>s
+            </p>
           </div>
         </div>
         <!--end col-->
@@ -47,36 +61,305 @@
         <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
           <div class="card border-0 bg-light rounded shadow">
             <div class="card-body p-4">
-              <span
-                class="badge rounded-pill bg-primary float-md-end mb-3 mb-sm-0"
-                >{{response.api_status_text}}</span
-              >
+              <span class="badge rounded-pill float-md-end mb-3 mb-sm-0 
+                {% if response.api_last_status_code == 200 %}
+                  bg-success
+                {% elif response.api_last_status_code >= 500 %}
+                  bg-danger
+                {% elif response.api_last_status_code >= 400 %}
+                  bg-warning
+                {% else %}
+                  bg-info
+                {% endif %}">
+                {{response.api_status_text}}
+              </span>
               <h5>{{response.api_name}}</h5>
-              <div class="mt-3">
-                <span class="text-muted d-block"
-                  ><i class="fa fa-home" aria-hidden="true"></i>
-                  <a href="#" target="_blank" class="text-muted"
-                    >{{response.api_url}}.</a
-                  ></span
-                >
-                <span class="text-muted d-block"
-                  ><i class="fa fa-map-marker" aria-hidden="true"></i> {{response.api_last_status_code}}</span
-                >
+              
+              <!-- Uptime Stats -->
+              <div class="uptime-stats mb-3">
+                <div class="progress">
+                  <div class="progress-bar bg-success" 
+                       role="progressbar" 
+                       style="width: {{response.uptime_percentage}}%"
+                       aria-valuenow="{{response.uptime_percentage}}" 
+                       aria-valuemin="0" 
+                       aria-valuemax="100">
+                    {{response.uptime_percentage|round|int}}% Uptime
+                  </div>
+                </div>
               </div>
 
               <div class="mt-3">
-                <a href="#" class="btn btn-primary">View Details</a>
+                <span class="text-muted d-block">
+                  <i class="fa fa-link" aria-hidden="true"></i>
+                  <a href="{{response.api_url}}" target="_blank" class="text-muted">
+                    {% if mask_api_urls %}
+                      {{response.api_name}} API
+                    {% else %}
+                      {{response.api_url}}
+                    {% endif %}
+                  </a>
+                </span>
+                <span class="text-muted d-block">
+                  <i class="fa fa-info-circle" aria-hidden="true"></i> 
+                  Status Code: {{response.api_last_status_code}}
+                </span>
+                <span class="text-muted d-block">
+                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                  Last Updated: {{response.checked_at}}
+                </span>
+                <span class="text-muted d-block">
+                  <i class="fa fa-tachometer" aria-hidden="true"></i>
+                  Response Time: {{(response.response_time or 0.0)|round(3)}}s
+                </span>
+              </div>
+
+              <div class="mt-3">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-{{loop.index}}">
+                  View Details
+                </button>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Modal for each API -->
+        <div class="modal fade" id="modal-{{loop.index}}" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">{{response.api_name}} Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <!-- Basic Info -->
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <h6>Basic Information</h6>
+                    <p><strong>URL:</strong> {{response.api_url}}</p>
+                    <p><strong>Status Code:</strong> {{response.api_last_status_code}}</p>
+                    <p><strong>Status:</strong> {{response.api_status_text}}</p>
+                    <p><strong>Message:</strong> {{response.api_last_msg}}</p>
+                    <p><strong>Last Checked:</strong> {{response.checked_at}}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6>Performance Stats (24h)</h6>
+                    <p><strong>Uptime:</strong> {{response.uptime_percentage|round|int}}%</p>
+                    <p><strong>Avg Response Time:</strong> {{(response.response_time_stats.avg or 0.0)|round(3)}}s</p>
+                    <p><strong>Min Response Time:</strong> {{(response.response_time_stats.min or 0.0)|round(3)}}s</p>
+                    <p><strong>Max Response Time:</strong> {{(response.response_time_stats.max or 0.0)|round(3)}}s</p>
+                  </div>
+                </div>
+
+                <!-- Graphs -->
+                <div class="row">
+                  <div class="col-12 mb-4">
+                    <h6>Response Time History (24h)</h6>
+                    <div id="response-time-graph-{{loop.index}}" style="width:100%; height:300px;"></div>
+                  </div>
+                  <div class="col-12">
+                    <h6>Status Code History (24h)</h6>
+                    <div id="status-code-graph-{{loop.index}}" style="width:100%; height:300px;"></div>
+                  </div>
+                </div>
+
+                <!-- Email Notifications -->
+                <div class="mt-4">
+                  <h6>Status Change Notifications</h6>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="notifications-{{loop.index}}"
+                           {% if notifications_enabled %}checked{% endif %}
+                           onchange="toggleNotifications('{{response.api_name}}', this.checked)">
+                    <label class="form-check-label" for="notifications-{{loop.index}}">
+                      Enable email notifications for status changes
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          // Initialize response time graph
+          var responseTimeData = {{response.history_data|tojson}};
+          var timestamps = responseTimeData.map(d => d.timestamp);
+          var responseTimes = responseTimeData.map(d => d.response_time || 0);
+          var statusCodes = responseTimeData.map(d => d.status_code);
+          
+          // Create color array based on status codes
+          var colors = statusCodes.map(code => 
+            code === 200 ? '#28a745' :  // Success - Green
+            code >= 500 ? '#dc3545' :   // Server Error - Red
+            code >= 400 ? '#ffc107' :   // Client Error - Yellow
+            '#17a2b8'                   // Other - Blue
+          );
+
+          Plotly.newPlot('response-time-graph-{{loop.index}}', [{
+            x: timestamps,
+            y: responseTimes,
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Response Time',
+            marker: {
+              color: colors
+            },
+            line: {
+              color: '#6c757d'  // Default line color
+            }
+          }], {
+            margin: { t: 0, b: 30, l: 40, r: 10 },
+            yaxis: { title: 'Response Time (s)' },
+            template: '{{theme}}' === 'dark' ? 'plotly_dark' : 'plotly_white'
+          });
+
+          // Initialize status code graph with color coding
+          Plotly.newPlot('status-code-graph-{{loop.index}}', [{
+            x: timestamps,
+            y: statusCodes,
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Status Code',
+            marker: {
+              color: colors,
+              size: 10
+            },
+            line: {
+              color: '#6c757d'  // Default line color
+            }
+          }], {
+            margin: { t: 0, b: 30, l: 40, r: 10 },
+            yaxis: { 
+              title: 'Status Code',
+              tickmode: 'array',
+              ticktext: ['Success (200)', 'Client Error (4xx)', 'Server Error (5xx)'],
+              tickvals: [200, 400, 500]
+            },
+            template: '{{theme}}' === 'dark' ? 'plotly_dark' : 'plotly_white',
+            showlegend: false
+          });
+
+          // Update graphs when modal is shown
+          document.getElementById('modal-{{loop.index}}').addEventListener('shown.bs.modal', function () {
+            Plotly.relayout('response-time-graph-{{loop.index}}', {
+              autosize: true
+            });
+            Plotly.relayout('status-code-graph-{{loop.index}}', {
+              autosize: true
+            });
+          });
+        </script>
         {% endfor %}
       </div>
       
+      <script>
+        // Function to update API status cards
+        function updateApiStatus(response) {
+          response.statuses.forEach((status, index) => {
+            // Update status badge
+            const badge = document.querySelector(`#api-${index} .badge`);
+            if (badge) {
+              badge.className = `badge rounded-pill float-md-end mb-3 mb-sm-0 ${
+                status.api_last_status_code === 200 ? 'bg-success' :
+                status.api_last_status_code >= 500 ? 'bg-danger' :
+                status.api_last_status_code >= 400 ? 'bg-warning' : 'bg-info'
+              }`;
+              badge.textContent = status.api_status_text;
+            }
 
+            // Update response time
+            const responseTime = document.querySelector(`#api-${index} .response-time`);
+            if (responseTime) {
+              responseTime.textContent = `Response Time: ${((status.response_time || 0.0)).toFixed(3)}s`;
+            }
 
-      
-      <!--end row-->
+            // Update uptime percentage
+            const uptimeBar = document.querySelector(`#api-${index} .progress-bar`);
+            if (uptimeBar) {
+              uptimeBar.style.width = `${status.uptime_percentage}%`;
+              uptimeBar.textContent = `${Math.round(status.uptime_percentage)}% Uptime`;
+            }
+
+            // Update graphs if modal is open
+            const modal = document.querySelector(`#modal-${index + 1}`);
+            if (modal && modal.classList.contains('show')) {
+              const timestamps = status.history_data.map(d => d.timestamp);
+              const responseTimes = status.history_data.map(d => d.response_time || 0);
+              const statusCodes = status.history_data.map(d => d.status_code);
+              
+              // Create color array for updates
+              const colors = statusCodes.map(code => 
+                code === 200 ? '#28a745' :  // Success - Green
+                code >= 500 ? '#dc3545' :   // Server Error - Red
+                code >= 400 ? '#ffc107' :   // Client Error - Yellow
+                '#17a2b8'                   // Other - Blue
+              );
+
+              Plotly.update(`response-time-graph-${index + 1}`, {
+                x: [timestamps],
+                y: [responseTimes],
+                'marker.color': [colors]
+              });
+
+              Plotly.update(`status-code-graph-${index + 1}`, {
+                x: [timestamps],
+                y: [statusCodes],
+                'marker.color': [colors]
+              });
+            }
+          });
+
+          // Update last check time
+          const lastCheckElement = document.querySelector('strong:contains("Last Check:")');
+          if (lastCheckElement) {
+            lastCheckElement.nextSibling.textContent = response.last_check;
+          }
+        }
+
+        // Countdown timer and auto-refresh
+        let timeLeft = {{api_ping_frequency_seconds}};
+        const countdownElement = document.getElementById('countdown');
+        
+        setInterval(() => {
+          timeLeft -= 1;
+          if (timeLeft <= 0) {
+            timeLeft = {{api_ping_frequency_seconds}};
+            // Fetch updated data
+            fetch('/api/status')
+              .then(response => response.json())
+              .then(data => updateApiStatus(data))
+              .catch(error => console.error('Error updating status:', error));
+          }
+          countdownElement.textContent = timeLeft;
+        }, 1000);
+
+        // Theme changing
+        function changeTheme(theme) {
+          fetch('/change_theme', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ theme: theme })
+          }).then(() => {
+            location.reload();
+          });
+        }
+
+        // Notification toggle
+        function toggleNotifications(apiName, enabled) {
+          fetch('/toggle_notifications', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+              api_name: apiName,
+              enabled: enabled 
+            })
+          });
+        }
+      </script>
     </div>
   </body>
 </html>
