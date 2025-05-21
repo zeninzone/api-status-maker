@@ -2,6 +2,7 @@
 <html lang="en" data-theme="{{theme}}">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Status Watcher</title>
     <link
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -21,11 +22,11 @@
     />
   </head>
   <body>
-    <div class="container mt-5 pt-4">
+    <div class="container-fluid px-3 px-md-4 py-4">
       <!-- Theme Selector -->
       <div class="theme-selector text-end mb-3">
-        <label for="theme">Theme:</label>
-        <select id="theme" class="form-select-sm" onchange="changeTheme(this.value)">
+        <label for="theme" class="me-2">Theme:</label>
+        <select id="theme" class="form-select-sm d-inline-block w-auto" onchange="changeTheme(this.value)">
           <option value="light" {% if theme == 'light' %}selected{% endif %}>Light</option>
           <option value="dark" {% if theme == 'dark' %}selected{% endif %}>Dark</option>
           <option value="blue" {% if theme == 'blue' %}selected{% endif %}>Blue</option>
@@ -34,46 +35,45 @@
       </div>
 
       <div class="row align-items-end mb-4 pb-2">
-        <div class="col-md-8">
+        <div class="col-12 col-md-8">
           <div class="section-title text-center text-md-start">
-            <h2 class="title mb-4">API Status for {{title}}</h2>
+            <h2 class="title mb-3 mb-md-4">API Status for {{title}}</h2>
             <p class="text-muted mb-0 para-desc">
               {{description}}
             </p>
           </div>
         </div>
-        <!--end col-->
 
-        <div class="col-md-4 mt-4 mt-sm-0">
+        <div class="col-12 col-md-4 mt-3 mt-md-0">
           <div class="text-center text-md-end">
-            <p class="text-dark">
+            <p class="text-dark mb-0">
               <strong>Last Check: </strong>{{resp_time}}<br>
               <strong>Next Check: </strong><span id="countdown">{{api_ping_frequency_seconds}}</span>s
             </p>
           </div>
         </div>
-        <!--end col-->
       </div>
-      <!--end row-->
       
-      <div class="row">
+      <div class="row g-3">
         {% for response in api_responses %}
-        <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
-          <div class="card border-0 bg-light rounded shadow">
-            <div class="card-body p-4">
-              <span class="badge rounded-pill float-md-end mb-3 mb-sm-0 
-                {% if response.api_last_status_code == 200 %}
-                  bg-success
-                {% elif response.api_last_status_code >= 500 %}
-                  bg-danger
-                {% elif response.api_last_status_code >= 400 %}
-                  bg-warning
-                {% else %}
-                  bg-info
-                {% endif %}">
-                {{response.api_status_text}}
-              </span>
-              <h5>{{response.api_name}}</h5>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card border-0 bg-light rounded shadow h-100">
+            <div class="card-body p-3 p-md-4">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <h5 class="card-title mb-0">{{response.api_name}}</h5>
+                <span class="badge rounded-pill ms-2
+                  {% if response.api_last_status_code == 200 %}
+                    bg-success
+                  {% elif response.api_last_status_code >= 500 %}
+                    bg-danger
+                  {% elif response.api_last_status_code >= 400 %}
+                    bg-warning
+                  {% else %}
+                    bg-info
+                  {% endif %}">
+                  {{response.api_status_text}}
+                </span>
+              </div>
               
               <!-- Uptime Stats -->
               <div class="uptime-stats mb-3">
@@ -90,9 +90,9 @@
               </div>
 
               <div class="mt-3">
-                <span class="text-muted d-block">
+                <span class="text-muted d-block mb-2">
                   <i class="fa fa-link" aria-hidden="true"></i>
-                  <a href="{{response.api_url}}" target="_blank" class="text-muted">
+                  <a href="{{response.api_url}}" target="_blank" class="text-muted text-truncate d-inline-block" style="max-width: 100%;">
                     {% if mask_api_urls %}
                       {{response.api_name}} API
                     {% else %}
@@ -100,22 +100,22 @@
                     {% endif %}
                   </a>
                 </span>
-                <span class="text-muted d-block">
+                <span class="text-muted d-block mb-2">
                   <i class="fa fa-info-circle" aria-hidden="true"></i> 
                   Status Code: {{response.api_last_status_code}}
                 </span>
-                <span class="text-muted d-block">
+                <span class="text-muted d-block mb-2">
                   <i class="fa fa-clock-o" aria-hidden="true"></i>
                   Last Updated: {{response.checked_at}}
                 </span>
-                <span class="text-muted d-block">
+                <span class="text-muted d-block mb-2">
                   <i class="fa fa-tachometer" aria-hidden="true"></i>
                   Response Time: {{(response.response_time or 0.0)|round(3)}}s
                 </span>
               </div>
 
               <div class="mt-3">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-{{loop.index}}">
+                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#modal-{{loop.index}}">
                   View Details
                 </button>
               </div>
@@ -125,7 +125,7 @@
 
         <!-- Modal for each API -->
         <div class="modal fade" id="modal-{{loop.index}}" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
+          <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">{{response.api_name}} Details</h5>
@@ -134,20 +134,26 @@
               <div class="modal-body">
                 <!-- Basic Info -->
                 <div class="row mb-4">
-                  <div class="col-md-6">
+                  <div class="col-12 col-md-6 mb-3 mb-md-0">
                     <h6>Basic Information</h6>
-                    <p><strong>URL:</strong> {{response.api_url}}</p>
-                    <p><strong>Status Code:</strong> {{response.api_last_status_code}}</p>
-                    <p><strong>Status:</strong> {{response.api_status_text}}</p>
-                    <p><strong>Message:</strong> {{response.api_last_msg}}</p>
-                    <p><strong>Last Checked:</strong> {{response.checked_at}}</p>
+                    <p class="mb-2"><strong>URL:</strong> 
+                      {% if mask_api_urls %}
+                        [URL Masked for Security]
+                      {% else %}
+                        {{response.api_url}}
+                      {% endif %}
+                    </p>
+                    <p class="mb-2"><strong>Status Code:</strong> {{response.api_last_status_code}}</p>
+                    <p class="mb-2"><strong>Status:</strong> {{response.api_status_text}}</p>
+                    <p class="mb-2"><strong>Message:</strong> {{response.api_last_msg}}</p>
+                    <p class="mb-2"><strong>Last Checked:</strong> {{response.checked_at}}</p>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-12 col-md-6">
                     <h6>Performance Stats (24h)</h6>
-                    <p><strong>Uptime:</strong> {{response.uptime_percentage|round|int}}%</p>
-                    <p><strong>Avg Response Time:</strong> {{(response.response_time_stats.avg or 0.0)|round(3)}}s</p>
-                    <p><strong>Min Response Time:</strong> {{(response.response_time_stats.min or 0.0)|round(3)}}s</p>
-                    <p><strong>Max Response Time:</strong> {{(response.response_time_stats.max or 0.0)|round(3)}}s</p>
+                    <p class="mb-2"><strong>Uptime:</strong> {{response.uptime_percentage|round|int}}%</p>
+                    <p class="mb-2"><strong>Avg Response Time:</strong> {{(response.response_time_stats.avg or 0.0)|round(3)}}s</p>
+                    <p class="mb-2"><strong>Min Response Time:</strong> {{(response.response_time_stats.min or 0.0)|round(3)}}s</p>
+                    <p class="mb-2"><strong>Max Response Time:</strong> {{(response.response_time_stats.max or 0.0)|round(3)}}s</p>
                   </div>
                 </div>
 
