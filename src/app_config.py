@@ -10,7 +10,10 @@ title = global_config.get("global_config", "title")
 description = global_config.get("global_config", "description")
 notification_email_address = global_config.get("global_config", "notification_email_address")
 api_ping_frequency_seconds = global_config.getint("global_config", "api_ping_frequency_seconds")
-mask_api_urls = global_config.getboolean("global_config", "mask_api_urls")
+try:
+    mask_api_urls = global_config.getboolean("global_config", "mask_api_urls")
+except:
+    mask_api_urls = False  # Default to False if not specified
 
 # Read API configurations
 api_config = []
