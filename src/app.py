@@ -21,9 +21,15 @@ config = ConfigParser()
 config.read("./config/config.ini")
 default_theme = config.get("global_config", "default_theme")
 
-# Create database tables
+# Create database tables and initialize default settings
 with app.app_context():
     db.create_all()
+    
+    # Initialize default theme if not exists
+    if not GlobalSettings.query.filter_by(key='theme').first():
+        theme_setting = GlobalSettings(key='theme', value=default_theme)
+        db.session.add(theme_setting)
+        db.session.commit()
 
 # Initialize scheduler with app context
 init_scheduler(app)
