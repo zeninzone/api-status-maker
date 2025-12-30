@@ -9,6 +9,8 @@
 A powerful API monitoring tool that helps you track the health of your microservices and provides a beautiful status page. This application offers real-time monitoring, historical data tracking, and multiple alerting mechanisms.
 
 ![API Status Maker Dashboard](screenshots/home.png)
+![API Status Maker 2xx Details](screenshots/details-green.png)
+![API Status Maker 4xx/5xx Details](screenshots/details-red.png)
 
 *Dashboard showing API statuses with both successful (green) and failed (red) endpoints*
 
