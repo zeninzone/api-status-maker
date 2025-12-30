@@ -10,6 +10,8 @@ A powerful API monitoring tool that helps you track the health of your microserv
 
 ![API Status Maker Dashboard](screenshots/home.png)
 
+*Dashboard showing API statuses with both successful (green) and failed (red) endpoints*
+
 ## Features
 
 - Real-time API health monitoring
@@ -44,7 +46,7 @@ api_ping_frequency_seconds = 30
 default_theme = light
 mask_api_urls = true
 
-# Alerting configuration
+# Alerting configuration (in progress)
 notification_email_address = your-email@example.com
 slack_webhook = https://hooks.slack.com/services/xxx/yyy/zzz
 discord_webhook = https://discord.com/api/webhooks/xxx/yyy
