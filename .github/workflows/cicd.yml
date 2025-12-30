@@ -18,14 +18,21 @@ jobs:
         with:
           length: 6
 
-      - run: echo $SHA
-        env:
-          SHA: ${{ steps.short-sha.outputs.sha }}
+      - name: Read version from VERSION file
+        id: version
+        run: |
+          VERSION=$(cat VERSION | tr -d '[:space:]')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Read version: $VERSION"
 
       - name: Build Docker image
         run: |
           cd src/
-          docker build -t alsaheem/api-status-checker:$SHA .
+          docker build \
+            -t alsaheem/api-status-checker:${{ steps.short-sha.outputs.sha }} \
+            -t alsaheem/api-status-checker:${{ steps.version.outputs.version }} \
+            -t alsaheem/api-status-checker:latest \
+            .
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -33,7 +40,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image to DockerHub
-        run: docker push alsaheem/api-status-checker:$SHA
-        env:
-          SHA: ${{ steps.short-sha.outputs.sha }}
+      - name: Push Docker images to DockerHub
+        run: |
+          docker push alsaheem/api-status-checker:${{ steps.short-sha.outputs.sha }}
+          docker push alsaheem/api-status-checker:${{ steps.version.outputs.version }}
+          docker push alsaheem/api-status-checker:latest
