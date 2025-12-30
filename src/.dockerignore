@@ -16,7 +16,7 @@ env/
 
 # Project specific
 config/
-instance/
+database/
 .pytest_cache/
 .coverage
 htmlcov/

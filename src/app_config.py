@@ -8,8 +8,12 @@ global_config.read("./config/config.ini")
 # Read global configurations
 title = global_config.get("global_config", "title")
 description = global_config.get("global_config", "description")
-notification_email_address = global_config.get("global_config", "notification_email_address")
-api_ping_frequency_seconds = global_config.getint("global_config", "api_ping_frequency_seconds")
+notification_email_address = global_config.get(
+    "global_config", "notification_email_address"
+)
+api_ping_frequency_seconds = global_config.getint(
+    "global_config", "api_ping_frequency_seconds"
+)
 try:
     mask_api_urls = global_config.getboolean("global_config", "mask_api_urls")
 except:
@@ -18,11 +22,13 @@ except:
 # Read API configurations
 api_config = []
 for section in global_config.sections():
-    if section.startswith('api_'):
-        api_config.append({
-            "api_name": global_config.get(section, "api_name"),
-            "api_url": global_config.get(section, "api_url")
-        })
+    if section.startswith("api_"):
+        api_config.append(
+            {
+                "api_name": global_config.get(section, "api_name"),
+                "api_url": global_config.get(section, "api_url"),
+            }
+        )
 
 # Read results
 try:

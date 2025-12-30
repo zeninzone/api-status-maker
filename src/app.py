@@ -9,8 +9,7 @@ from configparser import ConfigParser
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 
 # Create Flask app
@@ -24,10 +23,10 @@ default_theme = config.get("global_config", "default_theme")
 # Create database tables and initialize default settings
 with app.app_context():
     db.create_all()
-    
+
     # Initialize default theme if not exists
-    if not GlobalSettings.query.filter_by(key='theme').first():
-        theme_setting = GlobalSettings(key='theme', value=default_theme)
+    if not GlobalSettings.query.filter_by(key="theme").first():
+        theme_setting = GlobalSettings(key="theme", value=default_theme)
         db.session.add(theme_setting)
         db.session.commit()
 
@@ -42,25 +41,30 @@ scheduler.add_job(
     seconds=api_ping_frequency_seconds,
 )
 
+
 # Routes
 @app.route("/")
 def home():
     current_statuses = ApiStatus.query.all()
     user_prefs = UserPreferences.query.first()
-    
+
     # Get theme from database or use default
-    current_theme = GlobalSettings.get_setting('theme', default_theme)
-    
+    current_theme = GlobalSettings.get_setting("theme", default_theme)
+
     # Enhance status data with additional information
     enhanced_statuses = []
     for status in current_statuses:
         status_data = status.serialize
         # Add uptime percentage
-        status_data['uptime_percentage'] = ApiStatusHistory.get_uptime_percentage(status.api_name)
+        status_data["uptime_percentage"] = ApiStatusHistory.get_uptime_percentage(
+            status.api_name
+        )
         # Add response time stats
-        status_data['response_time_stats'] = ApiStatusHistory.get_response_time_stats(status.api_name)
+        status_data["response_time_stats"] = ApiStatusHistory.get_response_time_stats(
+            status.api_name
+        )
         # Add historical data for graphs
-        status_data['history_data'] = ApiStatusHistory.get_history_data(status.api_name)
+        status_data["history_data"] = ApiStatusHistory.get_history_data(status.api_name)
         enhanced_statuses.append(status_data)
 
     return render_template(
@@ -72,25 +76,27 @@ def home():
         resp_time=read_last_call_time(),
         theme=current_theme,
         notifications_enabled=user_prefs.notification_enabled if user_prefs else False,
-        mask_api_urls=mask_api_urls
+        mask_api_urls=mask_api_urls,
     )
 
-@app.route("/change_theme", methods=['POST'])
+
+@app.route("/change_theme", methods=["POST"])
 def change_theme():
     data = request.json
-    new_theme = data.get('theme', default_theme)
-    
+    new_theme = data.get("theme", default_theme)
+
     with app.app_context():
         # Update theme in GlobalSettings
-        GlobalSettings.set_setting('theme', new_theme)
-    
-    return jsonify({'status': 'success', 'theme': new_theme})
+        GlobalSettings.set_setting("theme", new_theme)
 
-@app.route("/toggle_notifications", methods=['POST'])
+    return jsonify({"status": "success", "theme": new_theme})
+
+
+@app.route("/toggle_notifications", methods=["POST"])
 def toggle_notifications():
     data = request.json
-    enabled = data.get('enabled', True)
-    
+    enabled = data.get("enabled", True)
+
     with app.app_context():
         prefs = UserPreferences.query.first()
         if not prefs:
@@ -99,8 +105,9 @@ def toggle_notifications():
         else:
             prefs.notification_enabled = enabled
         db.session.commit()
-    
-    return jsonify({'status': 'success'})
+
+    return jsonify({"status": "success"})
+
 
 @app.route("/api/status")
 def get_status():
@@ -109,20 +116,22 @@ def get_status():
     enhanced_statuses = []
     for status in current_statuses:
         status_data = status.serialize
-        status_data['uptime_percentage'] = ApiStatusHistory.get_uptime_percentage(status.api_name)
-        status_data['response_time_stats'] = ApiStatusHistory.get_response_time_stats(status.api_name)
-        status_data['history_data'] = ApiStatusHistory.get_history_data(status.api_name)
+        status_data["uptime_percentage"] = ApiStatusHistory.get_uptime_percentage(
+            status.api_name
+        )
+        status_data["response_time_stats"] = ApiStatusHistory.get_response_time_stats(
+            status.api_name
+        )
+        status_data["history_data"] = ApiStatusHistory.get_history_data(status.api_name)
         enhanced_statuses.append(status_data)
-    
-    return jsonify({
-        'statuses': enhanced_statuses,
-        'last_check': read_last_call_time()
-    })
+
+    return jsonify({"statuses": enhanced_statuses, "last_check": read_last_call_time()})
+
 
 if __name__ == "__main__":
     # Configure scheduler
     scheduler.init_app(app)
     scheduler.start()
-    
+
     # Run the app
     app.run(host="0.0.0.0", port=5001)

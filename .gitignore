@@ -33,7 +33,7 @@ ENV/
 .DS_Store
 
 # Project specific
-instance/
+database/
 *.db
 *.sqlite
 *.sqlite3

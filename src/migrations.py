@@ -7,4 +7,4 @@ migrate = Migrate(app, db)
 # flask db init     - Initialize migrations (first time only)
 # flask db migrate  - Generate a migration
 # flask db upgrade  - Apply migrations
-# flask db downgrade - Rollback migrations 
+# flask db downgrade - Rollback migrations

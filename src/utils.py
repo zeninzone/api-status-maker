@@ -5,31 +5,33 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 
+
 def send_notification(to_email, subject, body):
     """Send email notification for status changes"""
     # Note: Configure these with your email settings
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
     sender_email = "your-email@gmail.com"  # Configure this
-    sender_password = "your-app-password"   # Configure this
-    
+    sender_password = "your-app-password"  # Configure this
+
     try:
         msg = MIMEMultipart()
-        msg['From'] = sender_email
-        msg['To'] = to_email
-        msg['Subject'] = subject
-        
-        msg.attach(MIMEText(body, 'plain'))
-        
+        msg["From"] = sender_email
+        msg["To"] = to_email
+        msg["Subject"] = subject
+
+        msg.attach(MIMEText(body, "plain"))
+
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             server.starttls()
             server.login(sender_email, sender_password)
             server.send_message(msg)
-            
+
         return True
     except Exception as e:
         print(f"Failed to send notification: {str(e)}")
         return False
+
 
 def check_api_status(api_url, previous_status=None):
     start_time = time.time()
@@ -49,7 +51,7 @@ def check_api_status(api_url, previous_status=None):
             "status_code": response.status_code,
             "message": message,
             "api_status_text": api_status_text,
-            "response_time": float(round(response_time, 3))
+            "response_time": float(round(response_time, 3)),
         }
 
     except requests.ConnectionError:
@@ -59,7 +61,7 @@ def check_api_status(api_url, previous_status=None):
             "status_code": 500,
             "message": message,
             "api_status_text": api_status_text,
-            "response_time": 0.0
+            "response_time": 0.0,
         }
     except requests.Timeout:
         message = "API request timed out after 30 seconds"
@@ -68,42 +70,43 @@ def check_api_status(api_url, previous_status=None):
             "status_code": 504,
             "message": message,
             "api_status_text": api_status_text,
-            "response_time": 30.0
+            "response_time": 30.0,
         }
-    
+
     return status_data
 
-def get_theme_css(theme='light'):
+
+def get_theme_css(theme="light"):
     """Return CSS variables for different themes"""
     themes = {
-        'light': {
-            'bg-color': '#ffffff',
-            'text-color': '#000000',
-            'primary-color': '#6dc77a',
-            'secondary-color': '#f7f8fa',
-            'accent-color': '#4a90e2'
+        "light": {
+            "bg-color": "#ffffff",
+            "text-color": "#000000",
+            "primary-color": "#6dc77a",
+            "secondary-color": "#f7f8fa",
+            "accent-color": "#4a90e2",
         },
-        'dark': {
-            'bg-color': '#1a1a1a',
-            'text-color': '#ffffff',
-            'primary-color': '#6dc77a',
-            'secondary-color': '#2d2d2d',
-            'accent-color': '#4a90e2'
+        "dark": {
+            "bg-color": "#1a1a1a",
+            "text-color": "#ffffff",
+            "primary-color": "#6dc77a",
+            "secondary-color": "#2d2d2d",
+            "accent-color": "#4a90e2",
         },
-        'blue': {
-            'bg-color': '#f0f8ff',
-            'text-color': '#000000',
-            'primary-color': '#4a90e2',
-            'secondary-color': '#e6f3ff',
-            'accent-color': '#2d73c9'
+        "blue": {
+            "bg-color": "#f0f8ff",
+            "text-color": "#000000",
+            "primary-color": "#4a90e2",
+            "secondary-color": "#e6f3ff",
+            "accent-color": "#2d73c9",
         },
-        'purple': {
-            'bg-color': '#f8f0ff',
-            'text-color': '#000000',
-            'primary-color': '#9b59b6',
-            'secondary-color': '#f3e6ff',
-            'accent-color': '#8e44ad'
-        }
+        "purple": {
+            "bg-color": "#f8f0ff",
+            "text-color": "#000000",
+            "primary-color": "#9b59b6",
+            "secondary-color": "#f3e6ff",
+            "accent-color": "#8e44ad",
+        },
     }
-    
-    return themes.get(theme, themes['light'])
+
+    return themes.get(theme, themes["light"])

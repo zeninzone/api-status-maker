@@ -1,6 +1,14 @@
 # API Status Maker
 
+[![CI/CD](https://github.com/YOUR_USERNAME/api-status-maker/actions/workflows/cicd.yml/badge.svg)](https://github.com/YOUR_USERNAME/api-status-maker/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Docker](https://img.shields.io/badge/docker-available-blue.svg)](https://hub.docker.com/r/alsaheem/api-status-checker)
+[![Kubernetes](https://img.shields.io/badge/kubernetes-ready-blue.svg)](https://kubernetes.io/)
+
 A powerful API monitoring tool that helps you track the health of your microservices and provides a beautiful status page. This application offers real-time monitoring, historical data tracking, and multiple alerting mechanisms.
+
+![API Status Maker Dashboard](screenshots/home.png)
 
 ## Features
 
@@ -76,7 +84,7 @@ api_url = https://api2.example.com/health
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/api-status-maker.git
+git clone https://github.com/YOUR_USERNAME/api-status-maker.git
 cd api-status-maker
 ```
 
@@ -133,7 +141,7 @@ services:
     environment:
       - FLASK_ENV=production
       - FLASK_APP=wsgi.py
-      - DATABASE_URL=sqlite:///instance/api_status.db
+      - DATABASE_URL=sqlite:///database/api_status.db
     restart: unless-stopped
 ```
 

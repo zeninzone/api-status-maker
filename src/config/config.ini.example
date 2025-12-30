@@ -1,0 +1,29 @@
+[global_config]
+# Application title and description
+title = Your Company Name
+description = Your company description here
+
+# Monitoring settings
+api_ping_frequency_seconds = 30
+default_theme = light
+mask_api_urls = true
+
+# Alerting configuration
+notification_email_address = your-email@example.com
+slack_webhook = https://hooks.slack.com/services/xxx/yyy/zzz
+discord_webhook = https://discord.com/api/webhooks/xxx/yyy
+
+# API endpoints to monitor
+# Each API section should start with 'api_' prefix
+[api_service1]
+api_name = Service 1
+api_url = https://api1.example.com/health
+
+[api_service2]
+api_name = Service 2
+api_url = https://api2.example.com/health
+
+[api_service3]
+api_name = Service 3
+api_url = https://api3.example.com/health
+

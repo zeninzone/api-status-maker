@@ -4,8 +4,8 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Create necessary directories
-RUN mkdir -p /app/instance /app/config /instance \
-    && chmod -R 777 /instance
+RUN mkdir -p /app/database /app/config \
+    && chmod -R 777 /app/database
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
