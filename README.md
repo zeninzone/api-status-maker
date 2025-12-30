@@ -1,6 +1,6 @@
 # API Status Maker
 
-[![CI/CD](https://github.com/YOUR_USERNAME/api-status-maker/actions/workflows/cicd.yml/badge.svg)](https://github.com/YOUR_USERNAME/api-status-maker/actions)
+[![CI/CD](https://github.com/zeninzone/api-status-maker/actions/workflows/cicd.yml/badge.svg)](https://github.com/zeninzone/api-status-maker/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Docker](https://img.shields.io/badge/docker-available-blue.svg)](https://hub.docker.com/r/alsaheem/api-status-checker)
@@ -86,7 +86,7 @@ api_url = https://api2.example.com/health
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/api-status-maker.git
+git clone https://github.com/zeninzone/api-status-maker.git
 cd api-status-maker
 ```
 
