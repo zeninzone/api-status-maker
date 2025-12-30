@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Status Watcher</title>
+    <title>{{title}} - API Status Watcher</title>
+    {% if logo and logo.strip() %}
+    <link rel="icon" href="{{logo}}">
+    {% endif %}
     <link
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
@@ -65,8 +68,14 @@
         <!--end col-->
 
         <div class="col-md-4 mt-4 mt-sm-0">
+        
           <div class="text-center text-md-end">
-            <p class="text-dark mb-0">
+            {% if environment %}
+          <div class="my-4">
+            Environment: <span class="badge bg-info text-dark">{{environment}}</span>
+          </div>
+        {% endif %}
+            <p class="theme-text mb-0">
               <strong>Last Check: </strong>{{resp_time}}<br>
               <strong>Next Check: </strong><span id="countdown">{{api_ping_frequency_seconds}}</span>s
             </p>

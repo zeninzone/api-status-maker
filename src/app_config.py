@@ -8,6 +8,14 @@ global_config.read("./config/config.ini")
 # Read global configurations
 title = global_config.get("global_config", "title")
 description = global_config.get("global_config", "description")
+try:
+    environment = global_config.get("global_config", "environment").strip()
+except:
+    environment = ""  # Default to empty if not specified
+try:
+    logo = global_config.get("global_config", "logo").strip()
+except:
+    logo = ""  # Default to empty if not specified
 notification_email_address = global_config.get(
     "global_config", "notification_email_address"
 )

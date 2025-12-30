@@ -58,6 +58,10 @@ body {
     opacity: 0.8;
 }
 
+.theme-text {
+    color: var(--text-color) !important;
+}
+
 .badge {
     padding: 5px 8px;
     border-radius: 3px;

@@ -42,6 +42,8 @@ The application uses a `config.ini` file for configuration. Here's the complete 
 # Application title and description
 title = Your Company Name
 description = Your company description here
+environment = Production
+logo = https://example.com/logo.png
 
 # Monitoring settings
 api_ping_frequency_seconds = 30
@@ -68,6 +70,8 @@ api_url = https://api2.example.com/health
 1. **Global Configuration**:
    - `title`: Your company or application name
    - `description`: Brief description of your services
+   - `environment`: Environment name (e.g., Production, Staging, Development) - displayed as a badge
+   - `logo`: External URL to your logo image (used as favicon) - leave empty if not needed
    - `api_ping_frequency_seconds`: How often to check APIs (in seconds)
    - `default_theme`: Default UI theme (light/dark/blue/purple)
    - `mask_api_urls`: Whether to hide full API URLs in the UI

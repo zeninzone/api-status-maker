@@ -1,6 +1,6 @@
 from flask import render_template, jsonify, request
 from .schedules import read_last_call_time, schedulePingApiEndpoint, init_scheduler
-from .app_config import title, description, api_ping_frequency_seconds, mask_api_urls
+from .app_config import title, description, environment, logo, api_ping_frequency_seconds, mask_api_urls
 from .models import ApiStatus, ApiStatusHistory, UserPreferences, GlobalSettings
 from .utils import get_theme_css
 from . import create_app, db, scheduler
@@ -71,6 +71,8 @@ def home():
         "index.html",
         title=title,
         description=description,
+        environment=environment,
+        logo=logo,
         api_responses=enhanced_statuses,
         api_ping_frequency_seconds=api_ping_frequency_seconds,
         resp_time=read_last_call_time(),

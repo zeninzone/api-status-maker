@@ -7,6 +7,8 @@ data:
     [global_config]
     title = Nerobuild
     description = At Nerobuild, we are committed to providing you with a reliable and seamless experience when interacting with our APIs. Our API Status Page is designed to keep you informed about the current health and performance of our API services.
+    environment = Production
+    logo = 
     api_ping_frequency_seconds = 10
     notification_email_address = adebisiayomide07@gmail.com
     default_theme = dark
