@@ -179,37 +179,38 @@ kubectl apply -f k8s/
 
 ### Helm Chart
 
-You can deploy the app via the packaged Helm chart published in the GitHub Release `v1.0.5`.
+You can deploy the app via the packaged Helm chart hosted on GitHub Pages.
 
-#### Install directly from the release asset
+#### Add the Helm repo
 ```bash
-helm install api-status-maker \
-  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.5/api-status-maker-1.0.5.tgz
+helm repo add api-status-maker https://zeninzone.github.io/api-status-maker
+helm repo update
 ```
 
-#### Common overrides on install
+#### Install latest (1.0.6)
 ```bash
-helm install api-status-maker \
-  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.5/api-status-maker-1.0.5.tgz \
-  --set image.tag=1.0.5 \
-  --set config.global.environment=Staging \
-  --set config.global.logo="https://example.com/logo.png" \
-  --set config.global.mask_api_urls=true \
-  --set config.global.api_ping_frequency_seconds=60
+helm install api-status-maker api-status-maker/api-status-maker
+```
+
+#### Install a specific version
+```bash
+helm install api-status-maker api-status-maker/api-status-maker --version 1.0.6
 ```
 
 #### Install using your values file
 ```bash
-helm install api-status-maker \
-  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.5/api-status-maker-1.0.5.tgz \
-  -f values.yaml
+helm install api-status-maker api-status-maker/api-status-maker -f values.yaml
 ```
 
 #### Upgrade with a new chart or values
 ```bash
 helm upgrade api-status-maker \
-  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.5/api-status-maker-1.0.5.tgz \
-  --set image.tag=1.0.5
+  api-status-maker/api-status-maker \
+  --set image.tag=1.0.6 \
+  --set config.global.environment=Staging \
+  --set config.global.logo="https://example.com/logo.png" \
+  --set config.global.mask_api_urls=true \
+  --set config.global.api_ping_frequency_seconds=60
 ```
 
 Notes:
@@ -291,7 +292,7 @@ Common issues and solutions:
 
 ## Version Information
 
-- Current Version: 1.0.5
+- Current Version: 1.0.6
 - Supported Python versions: 3.8+
 - Database: SQLite (default), PostgreSQL (optional)
 
