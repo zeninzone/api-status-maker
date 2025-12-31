@@ -159,7 +159,6 @@ The application can be deployed to Kubernetes using the manifests in the `k8s` d
 - Deployment
 - Service
 - ConfigMap
-- PersistentVolumeClaim (for configuration)
 
 #### Prerequisites
 - Kubernetes cluster
@@ -177,6 +176,39 @@ kubectl create namespace api-status
 ```bash
 kubectl apply -f k8s/
 ```
+
+### Helm Chart
+
+You can deploy the app via the packaged Helm chart published in the GitHub Release `v1.0.0`.
+
+#### Install directly from the release asset
+```bash
+helm install api-status-maker \
+  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.0/api-status-maker-1.0.0.tgz
+```
+
+#### Common overrides on install
+```bash
+helm install api-status-maker \
+  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.0/api-status-maker-1.0.0.tgz \
+  --set image.tag=1.0.0 \
+  --set config.global.environment=Staging \
+  --set config.global.logo="https://example.com/logo.png" \
+  --set config.global.mask_api_urls=true \
+  --set config.global.api_ping_frequency_seconds=60
+```
+
+#### Upgrade with a new chart or values
+```bash
+helm upgrade api-status-maker \
+  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.0/api-status-maker-1.0.0.tgz \
+  --set image.tag=1.0.1
+```
+
+Notes:
+- Service is `ClusterIP` on port 80 targeting container port 5000.
+- SQLite uses `emptyDir` (no persistence across pod restarts).
+- Chart `version` and `appVersion` align with the app `VERSION` (1.0.0).
 
 ## API Endpoints
 
