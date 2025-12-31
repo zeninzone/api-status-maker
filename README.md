@@ -179,19 +179,19 @@ kubectl apply -f k8s/
 
 ### Helm Chart
 
-You can deploy the app via the packaged Helm chart published in the GitHub Release `v1.0.0`.
+You can deploy the app via the packaged Helm chart published in the GitHub Release `v1.0.5`.
 
 #### Install directly from the release asset
 ```bash
 helm install api-status-maker \
-  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.0/api-status-maker-1.0.0.tgz
+  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.5/api-status-maker-1.0.5.tgz
 ```
 
 #### Common overrides on install
 ```bash
 helm install api-status-maker \
-  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.0/api-status-maker-1.0.0.tgz \
-  --set image.tag=1.0.0 \
+  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.5/api-status-maker-1.0.5.tgz \
+  --set image.tag=1.0.5 \
   --set config.global.environment=Staging \
   --set config.global.logo="https://example.com/logo.png" \
   --set config.global.mask_api_urls=true \
@@ -201,15 +201,15 @@ helm install api-status-maker \
 #### Install using your values file
 ```bash
 helm install api-status-maker \
-  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.0/api-status-maker-1.0.0.tgz \
+  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.5/api-status-maker-1.0.5.tgz \
   -f values.yaml
 ```
 
 #### Upgrade with a new chart or values
 ```bash
 helm upgrade api-status-maker \
-  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.0/api-status-maker-1.0.0.tgz \
-  --set image.tag=1.0.1
+  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.5/api-status-maker-1.0.5.tgz \
+  --set image.tag=1.0.5
 ```
 
 Notes:
@@ -291,7 +291,7 @@ Common issues and solutions:
 
 ## Version Information
 
-- Current Version: 1.0.0
+- Current Version: 1.0.5
 - Supported Python versions: 3.8+
 - Database: SQLite (default), PostgreSQL (optional)
 

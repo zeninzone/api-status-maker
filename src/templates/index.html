@@ -71,8 +71,8 @@
         
           <div class="text-center text-md-end">
             {% if environment %}
-          <div class="my-4">
-            Environment: <span class="badge bg-info text-dark">{{environment}}</span>
+          <div class="my-4 font-weight-bold">
+            <strong class="font-weight-bold">Environment: </strong> <span class="badge bg-info text-dark capitalize text-uppercase">{{environment}}</span>
           </div>
         {% endif %}
             <p class="theme-text mb-0">
@@ -84,6 +84,16 @@
         <!--end col-->
       </div>
       <!--end row-->
+      
+      <!-- Health Summary (compact) -->
+      <div class="row mb-3">
+        <div class="col-12 text-muted fw-semibold fs-5">
+          <span class="text-success fw-bold" id="healthy-count">{{ healthy_count }}</span>
+          /
+          <span class="fw-bold" id="total-count">{{ healthy_count + unhealthy_count }}</span>
+          healthy
+        </div>
+      </div>
       
       <div class="row g-4">
         {% for response in api_responses %}
@@ -292,7 +302,16 @@
 
         // Function to update API status cards
         function updateApiStatus(response) {
-          response.statuses.forEach((status, index) => {
+        let healthy = 0;
+        let unhealthy = 0;
+        let total = response.statuses.length;
+
+        response.statuses.forEach((status, index) => {
+          if (status.api_last_status_code === 200) {
+            healthy += 1;
+          } else {
+            unhealthy += 1;
+          }
             // Update status badge
             const badge = document.querySelector(`#api-${index} .badge`);
             if (badge) {
@@ -336,7 +355,15 @@
                 x: [timestamps],
                 y: [responseTimes],
                 'marker.color': [colors]
-              });
+        });
+
+        // Update summary counts
+        const healthyEl = document.getElementById('healthy-count');
+        const unhealthyEl = document.getElementById('unhealthy-count');
+        const totalEl = document.getElementById('total-count');
+        if (healthyEl) healthyEl.textContent = healthy;
+        if (unhealthyEl) unhealthyEl.textContent = unhealthy;
+        if (totalEl) totalEl.textContent = total;
 
               Plotly.update(`status-code-graph-${index + 1}`, {
                 x: [timestamps],

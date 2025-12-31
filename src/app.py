@@ -67,6 +67,9 @@ def home():
         status_data["history_data"] = ApiStatusHistory.get_history_data(status.api_name)
         enhanced_statuses.append(status_data)
 
+    healthy_count = sum(1 for s in enhanced_statuses if s.get("api_last_status_code") == 200)
+    unhealthy_count = len(enhanced_statuses) - healthy_count
+
     return render_template(
         "index.html",
         title=title,
@@ -79,6 +82,8 @@ def home():
         theme=current_theme,
         notifications_enabled=user_prefs.notification_enabled if user_prefs else False,
         mask_api_urls=mask_api_urls,
+        healthy_count=healthy_count,
+        unhealthy_count=unhealthy_count,
     )
 
 
@@ -127,7 +132,17 @@ def get_status():
         status_data["history_data"] = ApiStatusHistory.get_history_data(status.api_name)
         enhanced_statuses.append(status_data)
 
-    return jsonify({"statuses": enhanced_statuses, "last_check": read_last_call_time()})
+    healthy_count = sum(1 for s in enhanced_statuses if s.get("api_last_status_code") == 200)
+    unhealthy_count = len(enhanced_statuses) - healthy_count
+
+    return jsonify(
+        {
+            "statuses": enhanced_statuses,
+            "last_check": read_last_call_time(),
+            "healthy_count": healthy_count,
+            "unhealthy_count": unhealthy_count,
+        }
+    )
 
 
 if __name__ == "__main__":
