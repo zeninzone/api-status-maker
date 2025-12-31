@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>api-status-maker Helm Repo</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    h2 { margin-bottom: 16px; }
+    #status { margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <h2>api-status-maker Helm Repository</h2>
+  <div id="status">Loading index.yaml...</div>
+  <table id="charts" class="display" style="width:100%">
+    <thead>
+      <tr>
+        <th>Version</th>
+        <th>App Version</th>
+        <th>Description</th>
+        <th>URL</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script>
+    async function loadIndex() {
+      try {
+        const res = await fetch('index.yaml');
+        if (!res.ok) throw new Error('Failed to fetch index.yaml');
+        const text = await res.text();
+        const data = jsyaml.load(text);
+        const entries = (data.entries && data.entries['api-status-maker']) || [];
+        const rows = entries.map(e => [
+          e.version || '',
+          e.appVersion || '',
+          e.description || '',
+          `<a href="${(e.urls && e.urls[0]) || '#'}" target="_blank" rel="noopener">download</a>`
+        ]);
+        $('#charts').DataTable({
+          data: rows,
+          columns: [
+            { title: 'Version' },
+            { title: 'App Version' },
+            { title: 'Description' },
+            { title: 'URL', orderable: false }
+          ],
+          order: [[0, 'desc']]
+        });
+        document.getElementById('status').textContent = 'Loaded index.yaml';
+      } catch (err) {
+        document.getElementById('status').textContent = 'Error loading index.yaml: ' + err.message;
+      }
+    }
+    loadIndex();
+  </script>
+</body>
+</html>

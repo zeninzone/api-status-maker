@@ -22,22 +22,17 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v4
 
-      - name: Package chart
+      - name: Package chart and prepare site
         run: |
           mkdir -p public
+          # Package current chart
           helm package helm/api-status-maker --destination public
-          helm repo index public --url https://zeninzone.github.io/api-status-maker
-          # Add a simple index.html and disable Jekyll so YAML is served as-is
-          cat > public/index.html <<'EOF'
-          <!doctype html>
-          <html>
-          <head><meta charset="utf-8"><title>api-status-maker Helm Repo</title></head>
-          <body>
-            <h3>api-status-maker Helm Repo</h3>
-            <p>Index file: <a href="index.yaml">index.yaml</a></p>
-          </body>
-          </html>
-          EOF
+
+          # Use curated index.html / index.yaml from repo (keeps all releases listed)
+          cp helm/index.html public/index.html
+          cp helm/index.yaml public/index.yaml
+
+          # Ensure assets are served without Jekyll processing
           touch public/.nojekyll
           ls -l public
 
