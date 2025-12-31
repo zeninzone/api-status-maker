@@ -198,6 +198,13 @@ helm install api-status-maker \
   --set config.global.api_ping_frequency_seconds=60
 ```
 
+#### Install using your values file
+```bash
+helm install api-status-maker \
+  https://github.com/zeninzone/api-status-maker/releases/download/v1.0.0/api-status-maker-1.0.0.tgz \
+  -f values.yaml
+```
+
 #### Upgrade with a new chart or values
 ```bash
 helm upgrade api-status-maker \
