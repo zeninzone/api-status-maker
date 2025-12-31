@@ -2,8 +2,8 @@ name: Publish Helm Chart to GitHub Pages
 
 on:
   push:
-    tags:
-      - 'v*'
+    # tags:
+      # - 'v*'
 
 permissions:
   contents: write
@@ -25,6 +25,19 @@ jobs:
           mkdir -p public
           helm package helm/api-status-maker --destination public
           helm repo index public --url https://zeninzone.github.io/api-status-maker
+          # Add a simple index.html and disable Jekyll so YAML is served as-is
+          cat > public/index.html <<'EOF'
+          <!doctype html>
+          <html>
+          <head><meta charset="utf-8"><title>api-status-maker Helm Repo</title></head>
+          <body>
+            <h3>api-status-maker Helm Repo</h3>
+            <p>Index file: <a href="index.yaml">index.yaml</a></p>
+          </body>
+          </html>
+          EOF
+          touch public/.nojekyll
+          ls -l public
 
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
