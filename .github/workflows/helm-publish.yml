@@ -1,7 +1,9 @@
 name: Publish Helm Chart to GitHub Pages
 
 on:
-  push
+  push:
+    branches:
+      - main
     # tags:
       # - 'v*'
 
