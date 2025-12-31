@@ -29,7 +29,7 @@ config:
     logo: ""
     api_ping_frequency_seconds: 60
     notification_email_address: example@example.com
-    default_theme: dark
+    default_theme: light
     mask_api_urls: false
 
   apis:

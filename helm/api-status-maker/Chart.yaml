@@ -2,6 +2,6 @@ apiVersion: v2
 name: api-status-maker
 description: A Helm chart for deploying the API Status Maker application
 type: application
-version: 1.0.3
+version: 1.0.4
 appVersion: 1.0.0
 
