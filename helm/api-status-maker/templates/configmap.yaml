@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "api-status-maker.fullname" . }}-config
+  labels:
+{{ include "api-status-maker.labels" . | indent 4 }}
+data:
+  config.ini: |
+    [global_config]
+    title = {{ .Values.config.global.title | quote }}
+    description = {{ .Values.config.global.description | quote }}
+    environment = {{ .Values.config.global.environment | quote }}
+    logo = {{ .Values.config.global.logo | quote }}
+    api_ping_frequency_seconds = {{ .Values.config.global.api_ping_frequency_seconds }}
+    notification_email_address = {{ .Values.config.global.notification_email_address | quote }}
+    default_theme = {{ .Values.config.global.default_theme | quote }}
+    mask_api_urls = {{ ternary "true" "false" .Values.config.global.mask_api_urls }}
+
+    {{- range .Values.config.apis }}
+    [{{ .name }}]
+    api_name = {{ .api_name | quote }}
+    api_url = {{ .api_url | quote }}
+    {{- end }}
+

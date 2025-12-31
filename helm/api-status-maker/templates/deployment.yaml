@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api-status-maker.fullname" . }}
+  labels:
+{{ include "api-status-maker.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "api-status-maker.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "api-status-maker.name" . }}
+{{ include "api-status-maker.labels" . | indent 8 }}
+    spec:
+      containers:
+        - name: {{ include "api-status-maker.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+              name: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+            - name: sqlite-data
+              mountPath: /app/database
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 15
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "api-status-maker.fullname" . }}-config
+        - name: sqlite-data
+          emptyDir: {}
+
