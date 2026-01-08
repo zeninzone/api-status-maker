@@ -53,4 +53,5 @@ spec:
         configMap:
           name: api-status-config
       - name: sqlite-data
-        emptyDir: {} 
+        persistentVolumeClaim:
+          claimName: api-status-maker-pvc
