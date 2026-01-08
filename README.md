@@ -188,14 +188,14 @@ helm repo add api-status-maker https://zeninzone.github.io/api-status-maker
 helm repo update
 ```
 
-#### Install latest (1.0.6)
+#### Install latest (1.0.7)
 ```bash
 helm install api-status-maker api-status-maker/api-status-maker
 ```
 
 #### Install a specific version
 ```bash
-helm install api-status-maker api-status-maker/api-status-maker --version 1.0.6
+helm install api-status-maker api-status-maker/api-status-maker --version 1.0.7
 ```
 
 #### Install using your values file
@@ -207,7 +207,7 @@ helm install api-status-maker api-status-maker/api-status-maker -f values.yaml
 ```bash
 helm upgrade api-status-maker \
   api-status-maker/api-status-maker \
-  --set image.tag=1.0.6 \
+  --set image.tag=1.0.7 \
   --set config.global.environment=Staging \
   --set config.global.logo="https://example.com/logo.png" \
   --set config.global.mask_api_urls=true \
@@ -293,7 +293,7 @@ Common issues and solutions:
 
 ## Version Information
 
-- Current Version: 1.0.6
+- Current Version: 1.0.7
 - Supported Python versions: 3.8+
 - Database: SQLite (default), PostgreSQL (optional)
 
