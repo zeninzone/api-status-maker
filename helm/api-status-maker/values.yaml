@@ -18,6 +18,11 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClassName: "" # Set to storage class name or leave empty for default
+
 config:
   global:
     title: Nerobuild

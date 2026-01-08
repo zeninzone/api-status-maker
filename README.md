@@ -174,6 +174,7 @@ kubectl create namespace api-status
 
 2. Apply the Kubernetes manifests:
 ```bash
+kubectl apply -f k8s/pvc.yaml
 kubectl apply -f k8s/
 ```
 
@@ -215,7 +216,7 @@ helm upgrade api-status-maker \
 
 Notes:
 - Service is `ClusterIP` on port 80 targeting container port 5000.
-- SQLite uses `emptyDir` (no persistence across pod restarts).
+- SQLite data is stored on a PVC (default 1Gi); adjust via Helm `persistence` values or `k8s/pvc.yaml`.
 - Chart `version` and `appVersion` align with the app `VERSION` (1.0.0).
 
 ## API Endpoints
