@@ -1,0 +1,76 @@
+apiVersion: v1
+entries:
+  api-status-maker:
+    - apiVersion: v2
+      name: api-status-maker
+      version: 1.0.7
+      appVersion: 1.0.7
+      description: A Helm chart for deploying the API Status Maker application
+      type: application
+      urls:
+        - https://github.com/zeninzone/api-status-maker/releases/download/v1.0.7/api-status-maker-1.0.7.tgz
+      created: "2025-12-31T00:00:00Z"
+    - apiVersion: v2
+      name: api-status-maker
+      version: 1.0.6
+      appVersion: 1.0.6
+      description: A Helm chart for deploying the API Status Maker application
+      type: application
+      urls:
+        - https://github.com/zeninzone/api-status-maker/releases/download/v1.0.6/api-status-maker-1.0.6.tgz
+      created: "2025-12-31T00:00:00Z"
+    - apiVersion: v2
+      name: api-status-maker
+      version: 1.0.5
+      appVersion: 1.0.5
+      description: A Helm chart for deploying the API Status Maker application
+      type: application
+      urls:
+        - https://github.com/zeninzone/api-status-maker/releases/download/v1.0.5/api-status-maker-1.0.5.tgz
+      created: "2025-12-31T00:00:00Z"
+    - apiVersion: v2
+      name: api-status-maker
+      version: 1.0.4
+      appVersion: 1.0.4
+      description: A Helm chart for deploying the API Status Maker application
+      type: application
+      urls:
+        - https://github.com/zeninzone/api-status-maker/releases/download/v1.0.4/api-status-maker-1.0.4.tgz
+      created: "2025-12-31T00:00:00Z"
+    - apiVersion: v2
+      name: api-status-maker
+      version: 1.0.3
+      appVersion: 1.0.3
+      description: A Helm chart for deploying the API Status Maker application
+      type: application
+      urls:
+        - https://github.com/zeninzone/api-status-maker/releases/download/v1.0.3/api-status-maker-1.0.3.tgz
+      created: "2025-12-31T00:00:00Z"
+    - apiVersion: v2
+      name: api-status-maker
+      version: 1.0.2
+      appVersion: 1.0.2
+      description: A Helm chart for deploying the API Status Maker application
+      type: application
+      urls:
+        - https://github.com/zeninzone/api-status-maker/releases/download/v1.0.2/api-status-maker-1.0.2.tgz
+      created: "2025-12-31T00:00:00Z"
+    - apiVersion: v2
+      name: api-status-maker
+      version: 1.0.1
+      appVersion: 1.0.1
+      description: A Helm chart for deploying the API Status Maker application
+      type: application
+      urls:
+        - https://github.com/zeninzone/api-status-maker/releases/download/v1.0.1/api-status-maker-1.0.1.tgz
+      created: "2025-12-31T00:00:00Z"
+    - apiVersion: v2
+      name: api-status-maker
+      version: 1.0.0
+      appVersion: 1.0.0
+      description: A Helm chart for deploying the API Status Maker application
+      type: application
+      urls:
+        - https://github.com/zeninzone/api-status-maker/releases/download/v1.0.0/api-status-maker-1.0.0.tgz
+      created: "2025-12-31T00:00:00Z"
+generated: "2025-12-31T00:00:00Z"
